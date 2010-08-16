@@ -1,0 +1,10 @@
+This is a Safari plugin that converts Github issue URLs to use the Cappuccino github issues app. 
+
+By default you're required to click the button in the toolbar to convert redirect you, but you can
+also have the plugin prompt you as you enter an issues page, or redirect you automatically.
+
+- When you click the button while viewing an issue you're automatically redirected to that issues.
+
+- If you're viewing a repo and click the button you will be redirected to that repo's issues.
+
+- If you're not viewing a repo and you click the button you will be redirected to the issues app without the application automatically selecting a repo or issue.
