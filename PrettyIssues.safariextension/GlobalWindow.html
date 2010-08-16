@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title></title>
+        <script src="redirect.js" />
+        <script>
+            
+            // button action
+            function goToGH(evt)
+            {
+                if (evt.command === "GoToGitHub")
+                {
+                    var currentURL = evt.target.browserWindow.activeTab.url;
+                    __goToGitHubIssuesApp(currentURL, evt.target.browserWindow.activeTab, false);
+                }
+            }
+            // Listen for the toolbar button to be clicked
+            safari.application.addEventListener("command", goToGH, false);
+
+            // callback for the load function in injector.js
+            function pageDidLoad(aMessageEvent)
+            {
+                if (aMessageEvent.name === "pageDidLoad")
+                {
+                    // find out what the user has their preference set to
+                    var doWhat = safari.extension.settings.shouldRedirectToGithub;
+
+                    if (doWhat === "yes" && __isOnGitHubIssuesPage(aMessageEvent.message))
+                        __goToGitHubIssuesApp(aMessageEvent.message, null, true);
+                    else if (doWhat === "prompt" && __isOnGitHubIssuesPage(aMessageEvent.message) && confirm("Would you like to view this issue in the Cappuccino Issues Application?"))
+                        __goToGitHubIssuesApp(aMessageEvent.message, null, true);
+                }
+
+            }
+
+            // register for the message in injector.js
+            safari.application.addEventListener("message",pageDidLoad,false);
+
+        </script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+	</body>
+</html>
+

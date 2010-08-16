@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>DefaultValue</key>
+		<string>click</string>
+		<key>Key</key>
+		<string>shouldRedirectToGithub</string>
+		<key>Title</key>
+		<string>Redirect To GitHub Issues App</string>
+		<key>Titles</key>
+		<array>
+			<string>When I Click The Toolbar Button</string>
+			<string>Automatically</string>
+			<string>Prompt Me Each Time</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<string>click</string>
+			<string>yes</string>
+			<string>prompt</string>
+		</array>
+	</dict>
+</array>
+</plist>
