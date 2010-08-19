@@ -37,11 +37,9 @@ function __goToGitHubIssuesApp(/*string*/aLocation, /*SafariBrowserTab.url*/prop
         // we're on an issue...
         // try to match it with something
         if (loc.match(matchesSpecificGithubIssue))
-            var newLocation = loc.replace(matchesSpecificGithubIssue,issueURLReplace);
+            var newLocation = "http://githubissues.heroku.com/#"+loc.match(matchesSpecificGithubIssue)[1]+"/"+loc.match(matchesSpecificGithubIssue)[2]+"/"+loc.match(matchesSpecificGithubIssue)[3];//loc.replace(matchesSpecificGithubIssue,issueURLReplace);
         else
-            var newLocation = loc.replace(matchesGithubIssuesPage,repoURLReplace);
-
-
+            var newLocation = "http://githubissues.heroku.com/#"+loc.match(matchesGithubIssuesPage)[1]+"/"+loc.match(matchesGithubIssuesPage)[2];
     }
     else if (propertyToSet && redirectArr)
     {
