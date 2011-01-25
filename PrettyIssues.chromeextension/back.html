@@ -1,0 +1,90 @@
+<!-- 
+	Author: Nabil Elisa 
+	Based (heavily) on work by: Randy Luecke
+-->
+<html>
+<body onload="init()">
+<script>
+
+function isOnGitHubIssuesPage(url)
+{
+    var loc = url,
+        matchesGithubIssuesPage = new RegExp(/^(?:http|https):\/\/(?:www.)?github.com\/([-\w]+)\/([-\w]+)\/issues(?:\/)?/);
+
+    return loc.match(matchesGithubIssuesPage);
+}
+
+function isOnRepoPage(url)
+{
+    var loc = url,
+        matchesGithubRepoPage = new RegExp(/^(?:http|https):\/\/(?:www.)?github.com\/([-\w]+)\/([-\w]+)(\/[\+-_\w]+)?/),
+        matches = loc.match(matchesGithubRepoPage);
+
+        if (!matches)
+            return false;
+
+        var user = matches[1],
+        last = matches[3],
+        reservedLocations = ["blog", "explore", "search", "inbox", "account", "logout", "repositories", "dashboard", "training", "support", "contact", "site", "security", "locale", "location", "timeline","tips"]
+
+        return (reservedLocations.indexOf(user.toLowerCase()) === -1) ? [user, /*repo*/matches[2]] : false;
+}
+
+function goToGitHubIssuesApp(tab)
+{
+    // in case this would ever get called from the main page
+    var loc = tab.url,
+        issueURLReplace = "http://githubissues.heroku.com/#$1/$2/$3",
+        repoURLReplace = "http://githubissues.heroku.com/#$1/$2", 
+        matchesSpecificGithubIssue = new RegExp(/^(?:http|https):\/\/(?:www.)?github.com\/([-\w]+)\/([-\w]+)\/issues(?:\/)?\#?(?:issue\/)?(\d+)/),
+        matchesGithubIssuesPage = new RegExp(/^(?:http|https):\/\/(?:www.)?github.com\/([-\w]+)\/([-\w]+)\/issues(?:\/)?/),
+        redirectArr = isOnRepoPage(loc);
+
+    if (isOnGitHubIssuesPage(loc))
+    {
+        // we're on an issue...
+        // try to match it with something
+        if (loc.match(matchesSpecificGithubIssue))
+            var newLocation = "http://githubissues.heroku.com/#"+loc.match(matchesSpecificGithubIssue)[1]+"/"+loc.match(matchesSpecificGithubIssue)[2]+"/"+loc.match(matchesSpecificGithubIssue)[3];//loc.replace(matchesSpecificGithubIssue,issueURLReplace);
+        else
+            var newLocation = "http://githubissues.heroku.com/#"+loc.match(matchesGithubIssuesPage)[1]+"/"+loc.match(matchesGithubIssuesPage)[2];
+    }
+    else if (isOnRepoPage(loc))
+    {
+        // if we're on the repo page redirect to that issue
+        // we only do this if the button was pushed, thus we check propertyToSet
+
+        var newLocation = "http://githubissues.heroku.com/#" + redirectArr[0] + "/" + redirectArr[1];
+
+    }
+    else
+    {
+        // if we're not an issues page we might be anywhere on the internets
+        // thus we're going to just redirect the user to the issues app
+        // but only if they click the button so we check propertyToSet
+
+        var newLocation = "http://githubissues.heroku.com/";
+        
+    }
+        
+    chrome.tabs.update(tab.id, {'url':newLocation});
+
+}
+
+// Called when the url of a tab changes.
+function checkForValidUrl(tabId, changeInfo, tab) {
+    if (tab.url.match(/https:\/\/github.com\/.+\/.+[\/.*/]?/) != null) {
+        chrome.pageAction.show(tabId);
+    } else {
+        chrome.pageAction.hide(tabId);
+    }
+};	
+
+function init () {
+    chrome.tabs.onUpdated.addListener(checkForValidUrl);
+    chrome.pageAction.onClicked.addListener(goToGitHubIssuesApp);
+}
+
+</script>
+</body>
+</html>
